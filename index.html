@@ -3,28 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Warwick Top - Le Guide Ultime</title>
+    <title>Warwick Top - Guide</title>
     <link href="https://fonts.googleapis.com/css2?family=Anton&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <audio id="sound-click" src="https://assets.mixkit.co/sfx/preview/mixkit-modern-technology-select-3124.mp3"></audio>
-
     <header>
         <h1>WARWICK <span class="green">TOP</span></h1>
         
-        <div class="filters">
-            <button class="filter-btn active" onclick="filterData('all')">TOUS</button>
-            <button class="filter-btn easy" onclick="filterData('easy')">FACILE</button>
-            <button class="filter-btn medium" onclick="filterData('medium')">MOYEN</button>
-            <button class="filter-btn hard" onclick="filterData('hard')">DIFFICILE</button>
-        </div>
-
         <div class="search-box">
             <i class="fas fa-search"></i>
             <input type="text" id="searchInput" placeholder="Chercher un champion...">
+        </div>
+
+        <div class="filters">
+            <button class="filter-btn active" onclick="filterData('all')">TOUT VOIR</button>
+            <button class="filter-btn easy" onclick="filterData('easy')">FACILE</button>
+            <button class="filter-btn medium" onclick="filterData('medium')">MOYEN</button>
+            <button class="filter-btn hard" onclick="filterData('hard')">ENFER</button>
         </div>
     </header>
 
@@ -54,17 +52,21 @@
                 </div>
 
                 <div class="notes-section">
-                    <h3><i class="fas fa-pencil-alt"></i> MES NOTES SECRÈTES</h3>
-                    <textarea id="user-notes" placeholder="Mes astuces perso pour ce matchup..."></textarea>
-                    <button id="save-btn">SAUVEGARDER LA NOTE</button>
-                    <span id="save-msg">Note enregistrée !</span>
+                    <h3><i class="fas fa-pencil-alt"></i> MES NOTES</h3>
+                    <textarea id="user-notes" placeholder="Mes astuces perso..."></textarea>
+                    <button id="save-btn">SAUVEGARDER</button>
+                    <span id="save-msg">Sauvegardé !</span>
                 </div>
             </div>
         </div>
     </div>
 
     <footer>
-        <div class="data-controls">
-            <h3>Gestion des Données</h3>
-            <button id="export-btn" class="data-btn"><i class="fas fa-download"></i> Sauvegarder mes notes (Fichier)</button>
-            <button id="import-btn-trigger" class="data-
+        <button id="export-btn" class="data-btn"><i class="fas fa-download"></i> Sauvegarder mes notes</button>
+        <button id="import-btn-trigger" class="data-btn"><i class="fas fa-upload"></i> Charger un fichier</button>
+        <input type="file" id="import-file" style="display: none;">
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
