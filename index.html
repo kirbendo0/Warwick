@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Warwick Top - Tracker Pro</title>
+    <title>Warwick Tracker V4</title>
     <link href="https://fonts.googleapis.com/css2?family=Anton&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -13,7 +13,6 @@
             --card: rgba(20, 20, 20, 0.9);
             --green: #0aff6c;
             --red: #ff0a43;
-            --yellow: #ffcc00;
             --text: #eee;
         }
 
@@ -27,164 +26,143 @@
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
-            transition: background-image 0.5s ease-in-out;
+            overflow-x: hidden;
         }
 
-        .bg-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.8); z-index: -1; pointer-events: none;
+        /* --- MODE HUD (OVERLAY) --- */
+        /* Quand cette classe est active, on cache tout sauf les sorts */
+        body.hud-active {
+            background: #000 !important; /* Fond noir pour contraste */
+            overflow: hidden;
+        }
+        body.hud-active header,
+        body.hud-active #grid,
+        body.hud-active .modal, 
+        body.hud-active .bg-overlay {
+            display: none !important;
         }
 
+        /* Conteneur spécial HUD qui n'apparait que quand actif */
+        #hud-container {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            background: rgba(0,0,0,0.8);
+        }
+
+        body.hud-active #hud-container { display: flex; }
+
+        /* Style des sorts en mode HUD (Gros boutons) */
+        .hud-spells-wrapper {
+            display: flex; gap: 20px;
+        }
+        
+        .hud-spell-box {
+            width: 100px; height: 100px; /* Très gros pour cliquer vite */
+            position: relative;
+            border: 4px solid var(--green);
+            border-radius: 10px;
+            cursor: pointer;
+            background: #000;
+        }
+
+        .hud-spell-box.active-cd {
+            border-color: red;
+            box-shadow: 0 0 20px red;
+        }
+
+        .hud-spell-img { width: 100%; height: 100%; object-fit: cover; }
+
+        .hud-timer-text {
+            position: absolute; top:0; left:0; width:100%; height:100%;
+            display: none; align-items: center; justify-content: center;
+            font-size: 3rem; font-weight: bold; color: white;
+            background: rgba(0,0,0,0.8); text-shadow: 2px 2px 0 #000;
+        }
+        .hud-spell-box.active-cd .hud-timer-text { display: flex; }
+
+        .hud-exit-btn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: #333; color: #888;
+            border: 1px solid #555; cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        /* --- FIN CSS HUD --- */
+
+        .bg-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); z-index: -1; pointer-events: none; }
         header { text-align: center; padding: 40px 20px; position: relative; }
-
-        .skin-selector {
-            position: absolute; top: 20px; right: 20px;
-            background: rgba(0,0,0,0.8); border: 1px solid var(--green); color: var(--green);
-            padding: 5px 10px; border-radius: 5px; cursor: pointer; font-family: 'Roboto';
-        }
-
-        h1 { 
-            font-family: 'Anton', sans-serif; font-size: 4rem; margin-bottom: 30px; 
-            text-shadow: 0 0 20px rgba(10, 255, 108, 0.3);
-        }
+        .skin-selector { position: absolute; top: 20px; right: 20px; background: rgba(0,0,0,0.8); border: 1px solid var(--green); color: var(--green); padding: 5px 10px; border-radius: 5px; cursor: pointer; }
+        h1 { font-family: 'Anton', sans-serif; font-size: 4rem; margin-bottom: 30px; text-shadow: 0 0 20px rgba(10, 255, 108, 0.3); }
         .green { color: var(--green); }
-
         .search-box { position: relative; max-width: 500px; margin: 0 auto 30px auto; }
-        .search-box input {
-            width: 100%; padding: 15px 50px 15px 25px; border-radius: 50px;
-            border: 2px solid #333; outline: none; background: #000; color: white; font-size: 1.2rem;
-        }
+        .search-box input { width: 100%; padding: 15px 50px 15px 25px; border-radius: 50px; border: 2px solid #333; outline: none; background: #000; color: white; font-size: 1.2rem; }
         .search-box input:focus { border-color: var(--green); box-shadow: 0 0 15px var(--green); }
         .search-box i { position: absolute; right: 25px; top: 50%; transform: translateY(-50%); color: var(--green); }
-
         .sorting-controls { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-bottom: 20px; }
-        .sort-btn {
-            background: rgba(0,0,0,0.6); border: 2px solid #444; color: #888;
-            padding: 10px 25px; font-family: 'Anton', sans-serif; font-size: 1.1rem;
-            cursor: pointer; transition: 0.3s; border-radius: 4px; text-transform: uppercase;
-            display: flex; align-items: center; gap: 10px;
-        }
+        .sort-btn { background: rgba(0,0,0,0.6); border: 2px solid #444; color: #888; padding: 10px 25px; font-family: 'Anton', sans-serif; font-size: 1.1rem; cursor: pointer; transition: 0.3s; border-radius: 4px; text-transform: uppercase; display: flex; align-items: center; gap: 10px; }
         .sort-btn:hover { transform: translateY(-3px); color: white; border-color: white; }
         .sort-btn.active { background: #111; color: var(--green); border-color: var(--green); box-shadow: 0 0 15px var(--green); }
-        .sort-icon { font-size: 0.9rem; }
-
-        /* Grid */
-        #grid {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 30px; padding: 20px 50px; max-width: 1400px; margin: 0 auto;
-        }
-
-        .card {
-            background: var(--card); border: 1px solid #333; border-radius: 8px;
-            overflow: hidden; cursor: pointer; transition: 0.3s; position: relative;
-        }
+        
+        #grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 30px; padding: 20px 50px; max-width: 1400px; margin: 0 auto; }
+        .card { background: var(--card); border: 1px solid #333; border-radius: 8px; overflow: hidden; cursor: pointer; transition: 0.3s; position: relative; }
         .card:hover { transform: translateY(-10px); border-color: var(--green); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         .card img { width: 100%; height: 140px; object-fit: cover; object-position: top; border-bottom: 2px solid var(--green); }
         .card h3 { padding: 15px; text-align: center; font-family: 'Anton'; font-size: 1.5rem; letter-spacing: 1px; margin: 0; }
-        
-        .card-wr-badge {
-            position: absolute; bottom: 10px; right: 10px; font-size: 0.9rem; font-weight: bold;
-            color: var(--green); background: rgba(0,0,0,0.9); padding: 4px 8px; border-radius: 4px; border: 1px solid var(--green);
-        }
-
-        .difficulty {
-            position: absolute; top: 10px; right: 10px; padding: 5px 10px; font-size: 0.8rem; font-weight: bold;
-            border-radius: 4px; text-transform: uppercase; color: black;
-        }
-        .easy { background: var(--green); }
-        .medium { background: var(--yellow); }
-        .hard { background: var(--red); color: white; }
-
-        .cheese-icon {
-            position: absolute; top: 10px; left: 10px; 
-            font-size: 1.5rem; filter: drop-shadow(0 0 5px black);
-            animation: bounce 2s infinite;
-        }
+        .card-wr-badge { position: absolute; bottom: 10px; right: 10px; font-size: 0.9rem; font-weight: bold; color: var(--green); background: rgba(0,0,0,0.9); padding: 4px 8px; border-radius: 4px; border: 1px solid var(--green); }
+        .difficulty { position: absolute; top: 10px; right: 10px; padding: 5px 10px; font-size: 0.8rem; font-weight: bold; border-radius: 4px; text-transform: uppercase; color: black; }
+        .easy { background: var(--green); } .medium { background: #ffcc00; } .hard { background: var(--red); color: white; }
+        .cheese-icon { position: absolute; top: 10px; left: 10px; font-size: 1.5rem; filter: drop-shadow(0 0 5px black); animation: bounce 2s infinite; }
         @keyframes bounce { 0%, 100% {transform: translateY(0);} 50% {transform: translateY(-5px);} }
 
         /* Modal */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 100; backdrop-filter: blur(5px); }
-        .modal-content {
-            background: #111; width: 90%; max-width: 800px; margin: 5% auto;
-            border: 1px solid var(--green); border-radius: 8px; animation: popIn 0.3s;
-        }
+        .modal-content { background: #111; width: 90%; max-width: 800px; margin: 5% auto; border: 1px solid var(--green); border-radius: 8px; animation: popIn 0.3s; }
         @keyframes popIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-
-        #modal-header {
-            height: 200px; background-size: cover; background-position: center; position: relative;
-            padding: 20px; border-bottom: 2px solid var(--green); display: flex; flex-direction: column; justify-content: flex-end;
-        }
+        #modal-header { height: 200px; background-size: cover; background-position: center; position: relative; padding: 20px; border-bottom: 2px solid var(--green); display: flex; flex-direction: column; justify-content: flex-end; }
         #modal-header::after { content:''; position: absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(to top, #111, transparent); }
-
         .modal-info-row { position: relative; z-index: 2; display: flex; justify-content: space-between; align-items: flex-end; width: 100%; }
         #modal-title { font-family: 'Anton'; font-size: 3.5rem; text-shadow: 3px 3px 0 #000; color: white; margin: 0; line-height: 1; }
-
         .meta-container { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; }
         
-        /* SPELL TRACKER CSS */
-        #summoner-spells { display: flex; gap: 8px; }
-        .spell-wrapper { position: relative; width: 45px; height: 45px; cursor: pointer; }
-        .spell-icon { width: 100%; height: 100%; border: 2px solid var(--green); border-radius: 5px; background: black; }
-        
-        /* Overlay du timer */
-        .spell-timer-overlay {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.85); color: var(--green);
-            display: none; /* Caché par défaut */
-            align-items: center; justify-content: center;
-            font-weight: bold; font-size: 0.9rem; border-radius: 5px;
-            border: 2px solid #555;
-        }
-        .spell-wrapper.active-cd .spell-timer-overlay { display: flex; } /* Affiché si CD actif */
+        /* Modal Spell Tracker */
+        #summoner-spells { display: flex; gap: 10px; }
+        .spell-wrapper { position: relative; width: 50px; height: 50px; cursor: pointer; transition: 0.2s; border-radius: 5px; overflow: hidden; border: 2px solid var(--green); }
+        .spell-wrapper.active-cd { border-color: red; box-shadow: 0 0 10px red; }
+        .spell-icon { width: 100%; height: 100%; display: block; }
+        .spell-timer-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); color: white; display: none; align-items: center; justify-content: center; font-weight: bold; font-size: 1.4rem; z-index: 10; }
+        .spell-wrapper.active-cd .spell-timer-overlay { display: flex; }
         
         .ult-timer { font-size: 0.9rem; color: #aaa; background: rgba(0,0,0,0.7); padding: 5px 10px; border-radius: 4px; border: 1px solid #444; }
         .ult-timer span { color: var(--green); font-weight: bold; }
-
-        .youtube-btn {
-            display: inline-block; background: #cc0000; color: white; padding: 5px 15px;
-            font-size: 0.9rem; font-weight: bold; text-decoration: none; border-radius: 4px;
-            margin-top: 5px; border: 1px solid #ff4444; transition: 0.2s;
-        }
+        .youtube-btn { display: inline-block; background: #cc0000; color: white; padding: 5px 15px; font-size: 0.9rem; font-weight: bold; text-decoration: none; border-radius: 4px; margin-top: 5px; border: 1px solid #ff4444; transition: 0.2s; }
         .youtube-btn:hover { background: red; transform: scale(1.05); }
+        .hud-trigger-btn { display: inline-block; background: #000; color: var(--green); border: 1px solid var(--green); padding: 5px 10px; border-radius: 4px; font-weight: bold; cursor: pointer; margin-top: 5px; font-size: 0.8rem; }
+        .hud-trigger-btn:hover { background: var(--green); color: black; }
 
         .close-btn { position: absolute; top: 20px; right: 30px; font-size: 40px; cursor: pointer; color: white; z-index: 10; transition: 0.2s; }
         .close-btn:hover { color: var(--green); }
-
-        /* SCOREBOARD UPDATED */
-        .scoreboard-bar {
-            background: #1a1a1a; border-bottom: 1px solid #333; padding: 15px 30px;
-            display: flex; align-items: center; justify-content: space-between;
-        }
+        .scoreboard-bar { background: #1a1a1a; border-bottom: 1px solid #333; padding: 15px 30px; display: flex; align-items: center; justify-content: space-between; }
         .stats-display { font-family: 'Anton'; font-size: 1.8rem; color: #fff; }
         .stats-display span { font-size: 1rem; color: #777; font-family: 'Roboto'; margin-left: 10px; }
-        
         .stats-controls { display: flex; gap: 10px; align-items: center; }
-        .stat-btn {
-            border: none; padding: 10px 30px; font-weight: bold; cursor: pointer; border-radius: 4px; color: white;
-            font-family: 'Anton'; letter-spacing: 1px; font-size: 1rem; transition: 0.2s;
-        }
-        .btn-win { background: #00b894; border: 2px solid #00b894; }
-        .btn-win:hover { background: #00a382; transform: scale(1.05); }
-        .btn-lose { background: #d63031; border: 2px solid #d63031; }
-        .btn-lose:hover { background: #c0392b; transform: scale(1.05); }
-
-        /* RESET BUTTON */
-        .btn-reset {
-            background: #2d3436; border: 1px solid #636e72; color: #b2bec3;
-            padding: 10px 15px; font-size: 1rem;
-        }
-        .btn-reset:hover { background: #636e72; color: white; }
+        .stat-btn { border: none; padding: 10px 30px; font-weight: bold; cursor: pointer; border-radius: 4px; color: white; font-family: 'Anton'; letter-spacing: 1px; font-size: 1rem; transition: 0.2s; }
+        .btn-win { background: #00b894; border: 2px solid #00b894; } .btn-win:hover { background: #00a382; }
+        .btn-lose { background: #d63031; border: 2px solid #d63031; } .btn-lose:hover { background: #c0392b; }
+        .btn-reset { background: #2d3436; border: 1px solid #636e72; color: #b2bec3; padding: 10px 15px; } .btn-reset:hover { background: #636e72; color: white; }
 
         .modal-body { padding: 30px; display: flex; flex-direction: column; gap: 20px; }
         .main-content { display: flex; gap: 30px; }
         .strategy-section { flex: 1; }
         .notes-section { flex: 1; display: flex; flex-direction: column; }
-
         .box { padding: 15px; background: #222; border-radius: 5px; margin-bottom: 20px; border-left: 4px solid #555; }
-        .box.pros { border-color: var(--green); }
-        .box.cons { border-color: var(--red); }
+        .box.pros { border-color: var(--green); } .box.cons { border-color: var(--red); }
         .box h3 { font-size: 1.1rem; color: #fff; margin-bottom: 10px; font-family: 'Anton'; }
-
         textarea { width: 100%; height: 200px; background: #0a0a0a; border: 1px solid #333; color: var(--green); padding: 15px; resize: none; margin-bottom: 15px; font-family: monospace; font-size: 1rem; }
         textarea:focus { border-color: var(--green); outline: none; }
         #save-btn { width: 100%; padding: 15px; background: var(--green); color: black; border: none; font-weight: bold; cursor: pointer; font-family: 'Anton'; font-size: 1.2rem; transition: 0.3s; }
@@ -202,6 +180,13 @@
 <body>
 
     <div class="bg-overlay"></div>
+
+    <div id="hud-container">
+        <h2 style="color:white; font-family:'Anton'; margin-bottom:20px; letter-spacing:2px;">HUD TRACKER</h2>
+        <div class="hud-spells-wrapper" id="hud-spells-wrapper">
+            </div>
+        <button class="hud-exit-btn" onclick="toggleHUD(false)">QUITTER HUD</button>
+    </div>
 
     <header>
         <select id="skin-select" class="skin-selector" onchange="changeSkin(this.value)">
@@ -241,7 +226,10 @@
                     <h2 id="modal-title">CHAMPION</h2>
                     <div class="meta-container">
                         <div id="summoner-spells"></div>
-                        <div id="ult-timer-display" class="ult-timer"></div>
+                        <button class="hud-trigger-btn" onclick="toggleHUD(true)">
+                            <i class="fas fa-desktop"></i> MODE HUD (OVERLAY)
+                        </button>
+                        <div id="ult-timer-display" class="ult-timer" style="margin-top:5px;"></div>
                         <div id="youtube-container"></div>
                     </div>
                 </div>
@@ -254,7 +242,7 @@
                 <div class="stats-controls">
                     <button class="stat-btn btn-win" onclick="addWin()"><i class="fas fa-check"></i> VICTOIRE</button>
                     <button class="stat-btn btn-lose" onclick="addLoss()"><i class="fas fa-times"></i> DÉFAITE</button>
-                    <button class="stat-btn btn-reset" onclick="resetStats()" title="Reset Stats"><i class="fas fa-trash"></i></button>
+                    <button class="stat-btn btn-reset" onclick="resetStats()" title="Reset"><i class="fas fa-trash"></i></button>
                 </div>
             </div>
 
@@ -285,22 +273,11 @@
     <script>
         const spellUrl = (spell) => `https://ddragon.leagueoflegends.com/cdn/13.24.1/img/spell/Summoner${spell}.png`;
 
-        // Cooldowns de base (en secondes)
-        const spellCDs = {
-            "Flash": 300,
-            "Ghost": 240,
-            "Barrier": 180,
-            "Ignite": 180,
-            "Teleport": 360,
-            "Exhaust": 210,
-            "Heal": 240,
-            "Cleanse": 210,
-            "Smite": 15 // Pas vraiment pertinent au top mais bon
-        };
-
-        // Stockage des timers actifs
-        // Format: { "Darius_Flash": { endTime: 123456789 } }
+        const spellCDs = { "Flash": 300, "Ghost": 240, "Barrier": 180, "Ignite": 180, "Teleport": 360, "Exhaust": 210, "Heal": 240, "Cleanse": 210 };
         let activeTimers = {};
+        
+        // Champion sélectionné actuellement (Objet complet)
+        let selectedChampion = null;
 
         const data = [
             { id: "Darius", name: "Darius", diff: "hard", img: "Darius", spells: ["Flash", "Barrier"], ult: "120s / 100s / 80s", cheese: false, pros: "Gagne les courts trades si tu esquives son A (Q) externe.", cons: "5 stacks = mort." },
@@ -362,12 +339,13 @@
         const statsDisplay = document.getElementById('stats-display');
         const sortNameBtn = document.getElementById('sort-name');
         const sortWrBtn = document.getElementById('sort-wr');
+        // HUD Elements
+        const hudContainer = document.getElementById('hud-container');
+        const hudSpellsWrapper = document.getElementById('hud-spells-wrapper');
 
         let sortBy = 'name';
         let sortDirection = 'asc';
         let currentId = null;
-
-        // --- FONCTIONS ---
 
         function changeSkin(skinId) {
             document.body.style.backgroundImage = `url('https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Warwick_${skinId}.jpg')`;
@@ -429,24 +407,21 @@
 
         function openModal(c) {
             currentId = c.id;
+            selectedChampion = c; // Stock pour le mode HUD
             mTitle.innerText = c.name.toUpperCase();
             mHeader.style.backgroundImage = `url('https://ddragon.leagueoflegends.com/cdn/img/champion/splash/${c.img}_0.jpg')`;
             mPros.innerText = c.pros;
             mCons.innerText = c.cons;
             
-            // GENERATION DES SORTS AVEC TRACKER
+            // GENERATION DU TRACKER (MODAL)
             mSpells.innerHTML = c.spells.map(spell => {
-                // Check si un timer est actif
-                const timerKey = `${c.id}_${spell}`;
-                const isActive = activeTimers[timerKey] && activeTimers[timerKey].endTime > Date.now();
                 return `
-                <div class="spell-wrapper" id="spell-btn-${spell}" onclick="toggleSpellTimer('${c.id}', '${spell}')">
-                    <img src="${spellUrl(spell)}" class="spell-icon" title="${spell}">
+                <div class="spell-wrapper" id="spell-btn-${spell}" onclick="toggleSpellTimer('${c.id}', '${spell}')" title="Cliquer pour lancer le timer">
+                    <img src="${spellUrl(spell)}" class="spell-icon">
                     <div class="spell-timer-overlay" id="timer-overlay-${spell}"></div>
                 </div>`;
             }).join('');
             
-            // Si des timers sont actifs, on relance l'affichage
             c.spells.forEach(spell => updateSpellUI(c.id, spell));
 
             mUlt.innerHTML = `R CD: <span>${c.ult || 'N/A'}</span>`;
@@ -458,56 +433,88 @@
             saveMsg.style.opacity = "0";
         }
 
-        // --- SPELL TIMER LOGIC ---
+        // --- HUD LOGIC ---
+        function toggleHUD(isActive) {
+            const body = document.body;
+            if(isActive && selectedChampion) {
+                // Active le mode HUD
+                body.classList.add('hud-active');
+                
+                // Génère les sorts version GÉANTE
+                hudSpellsWrapper.innerHTML = selectedChampion.spells.map(spell => {
+                    return `
+                    <div class="hud-spell-box" id="hud-spell-btn-${spell}" onclick="toggleSpellTimer('${selectedChampion.id}', '${spell}')">
+                        <img src="${spellUrl(spell)}" class="hud-spell-img">
+                        <div class="hud-timer-text" id="hud-timer-overlay-${spell}"></div>
+                    </div>`;
+                }).join('');
+                
+                // Active l'UI
+                selectedChampion.spells.forEach(spell => updateSpellUI(selectedChampion.id, spell));
+
+            } else {
+                // Désactive
+                body.classList.remove('hud-active');
+            }
+        }
+
+        // --- TRACKER FUNCTIONS (Gère les deux UIs : Modal et HUD) ---
         function toggleSpellTimer(champId, spell) {
             const timerKey = `${champId}_${spell}`;
-            const cd = spellCDs[spell] || 300; // Default 300s
+            const cd = spellCDs[spell] || 300; 
 
             if (activeTimers[timerKey] && activeTimers[timerKey].endTime > Date.now()) {
-                // Annuler le timer si on clique dessus
-                delete activeTimers[timerKey];
+                delete activeTimers[timerKey]; 
                 updateSpellUI(champId, spell);
             } else {
-                // Démarrer le timer
-                activeTimers[timerKey] = { endTime: Date.now() + (cd * 1000) };
+                activeTimers[timerKey] = { endTime: Date.now() + (cd * 1000) }; 
                 updateSpellUI(champId, spell);
             }
         }
 
         function updateSpellUI(champId, spell) {
-            const wrapper = document.getElementById(`spell-btn-${spell}`);
-            const overlay = document.getElementById(`timer-overlay-${spell}`);
-            if(!wrapper || !overlay) return;
+            // UI MODAL
+            const modalWrapper = document.getElementById(`spell-btn-${spell}`);
+            const modalOverlay = document.getElementById(`timer-overlay-${spell}`);
+            
+            // UI HUD
+            const hudWrapper = document.getElementById(`hud-spell-btn-${spell}`);
+            const hudOverlay = document.getElementById(`hud-timer-overlay-${spell}`);
 
             const timerKey = `${champId}_${spell}`;
             const timerData = activeTimers[timerKey];
 
-            // Nettoyage intervalle existant sur l'element
-            if(wrapper.interval) clearInterval(wrapper.interval);
+            // On utilise un intervalle global pour éviter les conflits, ou on check juste l'état
+            // Pour simplifier, on relance la logique de check
+            
+            // Nettoyage ancien intervalle stocké sur l'objet window (global) pour ce spell
+            if(window[`interval_${timerKey}`]) clearInterval(window[`interval_${timerKey}`]);
 
             if (timerData && timerData.endTime > Date.now()) {
-                wrapper.classList.add('active-cd');
+                if(modalWrapper) modalWrapper.classList.add('active-cd');
+                if(hudWrapper) hudWrapper.classList.add('active-cd');
                 
-                // Fonction de mise à jour tick par tick
                 const tick = () => {
                     const remaining = Math.ceil((timerData.endTime - Date.now()) / 1000);
                     if(remaining <= 0) {
                         delete activeTimers[timerKey];
-                        wrapper.classList.remove('active-cd');
-                        clearInterval(wrapper.interval);
+                        if(modalWrapper) modalWrapper.classList.remove('active-cd');
+                        if(hudWrapper) hudWrapper.classList.remove('active-cd');
+                        clearInterval(window[`interval_${timerKey}`]);
                     } else {
-                        overlay.innerText = remaining;
+                        if(modalOverlay) modalOverlay.innerText = remaining;
+                        if(hudOverlay) hudOverlay.innerText = remaining;
                     }
                 };
                 
-                tick(); // Premier appel
-                wrapper.interval = setInterval(tick, 1000);
+                tick();
+                window[`interval_${timerKey}`] = setInterval(tick, 1000);
             } else {
-                wrapper.classList.remove('active-cd');
+                if(modalWrapper) modalWrapper.classList.remove('active-cd');
+                if(hudWrapper) hudWrapper.classList.remove('active-cd');
             }
         }
 
-        // --- STATS LOGIC ---
         function getStats(id) {
             const s = localStorage.getItem(`ww_stats_${id}`);
             return s ? JSON.parse(s) : { wins: 0, losses: 0 };
@@ -523,7 +530,6 @@
             const s = getStats(id);
             const total = s.wins + s.losses;
             const wr = total > 0 ? Math.round((s.wins / total) * 100) : 0;
-            
             let color = "#fff";
             if(total > 0) {
                 if(wr >= 55) color = "#2ecc71";
