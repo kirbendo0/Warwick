@@ -1,119 +1,123 @@
-// --- BASE DE DONNÉES EXTENSIVE (35 CHAMPIONS) ---
+// --- CONFIGURATION ---
+// URL des images de sorts (DataDragon)
+const spellUrl = (spell) => `https://ddragon.leagueoflegends.com/cdn/13.24.1/img/spell/Summoner${spell}.png`;
+
+// --- DATABASE (35 CHAMPIONS AVEC SORTS) ---
 const data = [
     // --- LES CLASSIQUES ---
-    { id: "Darius", name: "Darius", diff: "hard", img: "Darius",
-      pros: "Tu gagnes les trades courts si tu Q-hold son A (zone externe). Utilise E pour tank son burst.",
+    { id: "Darius", name: "Darius", diff: "hard", img: "Darius", spells: ["Flash", "Barrier"],
+      pros: "Tu gagnes court trade si tu esquives Q externe. E pour réduire burst.",
       cons: "5 stacks = mort. Ne fight jamais longtemps sans ton E." },
-    { id: "Garen", name: "Garen", diff: "medium", img: "Garen",
-      pros: "Utilise E quand il fonce avec son A (Silence). Tu peux heal sur les sbires pendant qu'il spin.",
-      cons: "Son R + Ignite t'exécute de très loin. Attention au burst." },
-    { id: "Teemo", name: "Teemo", diff: "easy", img: "Teemo",
-      pros: "Niveau 6 : R + Ignite = Kill garanti. Ton Q suit son Flash.",
-      cons: "Le blind t'empêche de te soigner. Ne prends pas de dégâts gratuits avant le niveau 3." },
-    { id: "Sett", name: "Sett", diff: "hard", img: "Sett",
-      pros: "Q-hold pour passer derrière lui quand il charge son Z (coup de poing zone).",
-      cons: "Son burst est énorme early. Ne le laisse pas te grab dans ses sbires." },
-    
-    // --- LES BRUISERS ---
-    { id: "Jax", name: "Jax", diff: "medium", img: "Jax",
-      pros: "Active E quand il active son E (Hélicoptère). Fear-le avant qu'il ne t'étourdisse.",
-      cons: "Il outscale très fort. Ne laisse pas la game durer." },
-    { id: "Fiora", name: "Fiora", diff: "hard", img: "Fiora",
-      pros: "Colle-toi aux murs pour protéger tes points vitaux.",
-      cons: "Si elle pare (W) ton Fear ou ton R, tu es mort. Matchup très technique." },
-    { id: "Renekton", name: "Renekton", diff: "medium", img: "Renekton",
-      pros: "Ton E tank tout son burst. Soigne-toi quand il n'a plus de rage.",
-      cons: "Il peut briser ton bouclier avec son Z renforcé." },
-    { id: "Riven", name: "Riven", diff: "medium", img: "Riven",
-      pros: "Ton E annule son burst. Elle est très fragile si elle est Fear.",
-      cons: "Si elle te kite bien, tu ne la toucheras jamais." },
-    { id: "Irelia", name: "Irelia", diff: "hard", img: "Irelia",
-      pros: "Son stun est prévisible. Fear-la quand elle Q sur toi.",
-      cons: "Si elle a son passif chargé (4 stacks), ne fight pas. Elle te découpe." },
-    { id: "Camille", name: "Camille", diff: "easy", img: "Camille",
-      pros: "Tu peux annuler son grappin (E) avec ton Fear. Tu gagnes les longs trades.",
-      cons: "Elle peut kite avec son Z. Attention à ses dégâts bruts en late game." },
-    { id: "Aatrox", name: "Aatrox", diff: "medium", img: "Aatrox",
-      pros: "Q-hold pour passer derrière lui lors de ses Q. Esquive les sweet spots.",
-      cons: "Il se soigne beaucoup. Prends l'anti-heal (800g) très vite." },
-    
-    // --- LES TANKS ---
-    { id: "Malphite", name: "Malphite", diff: "easy", img: "Malphite",
-      pros: "Il ne peut pas te tuer. Tu peux le dive facilement avec ton R.",
-      cons: "Il sera plus utile en teamfight. Splitpush pour le bloquer." },
-    { id: "Sion", name: "Sion", diff: "easy", img: "Sion",
-      pros: "Q-hold son A pour l'interrompre ou l'esquiver. C'est un sac à PV pour toi.",
-      cons: "Il reviendra toujours sur la lane avec son R ou TP. Attention aux ganks." },
-    { id: "Ornn", name: "Ornn", diff: "medium", img: "Ornn",
-      pros: "Q-hold quand il te fonce dessus ou crache du feu. Tu peux annuler son R avec ton R.",
-      cons: "Il est très tanky et fait mal. Ne le sous-estime pas." },
-    { id: "Shen", name: "Shen", diff: "easy", img: "Shen",
-      pros: "Annule son R avec ton E ou R. Quand il part, prends sa tour.",
-      cons: "Sa zone (W) bloque tes attaques. Attends qu'elle disparaisse." },
-    { id: "TahmKench", name: "Tahm Kench", diff: "hard", img: "TahmKench",
-      pros: "Pas grand chose. Farm et attends ton jungler.",
-      cons: "Il te bat en stat-check. S'il te mange sous tour, tu es mort." },
-    { id: "Chogath", name: "Cho'Gath", diff: "medium", img: "Chogath",
-      pros: "Esquive son A (Q) et tu gagnes. Tu es plus rapide que lui.",
-      cons: "Son R (Miam) t'exécute même si tu as ton E actif. Attention à tes HP." },
-    { id: "Mundo", name: "Dr. Mundo", diff: "easy", img: "DrMundo",
-      pros: "Colle-toi à lui. Ton soin bat le sien en early.",
-      cons: "Ne reste pas low HP, il lance ses couperets. Prends anti-heal." },
-    { id: "KSante", name: "K'Sante", diff: "medium", img: "KSante",
-      pros: "Il ne fait pas assez de dégâts pour te tuer early. Sustain sur lui.",
-      cons: "Il a beaucoup de CC et peut t'éloigner de ta team ou te mettre sous tour." },
+    { id: "Garen", name: "Garen", diff: "medium", img: "Garen", spells: ["Flash", "Barrier"],
+      pros: "Utilise E quand il fonce avec son A. Heal sur sbires pendant son spin.",
+      cons: "R + Ignite t'exécute de loin." },
+    { id: "Teemo", name: "Teemo", diff: "easy", img: "Teemo", spells: ["Flash", "Ignite"],
+      pros: "Niveau 6 : R + Ignite = Kill. Q suit son Flash.",
+      cons: "Blind empêche soin. Ne prends pas de poke gratuit." },
+    { id: "Sett", name: "Sett", diff: "hard", img: "Sett", spells: ["Flash", "Barrier"],
+      pros: "Q-hold pour passer derrière son Z (coup de poing).",
+      cons: "Burst énorme. Ne le laisse pas te grab dans ses sbires." },
 
-    // --- LES RANGED & PENIBLES ---
-    { id: "Vayne", name: "Vayne", diff: "hard", img: "Vayne",
-      pros: "Si tu touches ton R, elle meurt. Joue avec les bush.",
-      cons: "Elle te kite à l'infini. Si elle te condamne (E) au mur, c'est fini." },
-    { id: "Quinn", name: "Quinn", diff: "hard", img: "Quinn",
-      pros: "Niveau 6, tu peux la suivre avec ton passif de vitesse.",
-      cons: "Son aveuglement et son saut t'empêchent de l'atteindre. Joue passif." },
-    { id: "Jayce", name: "Jayce", diff: "medium", img: "Jayce",
-      pros: "S'il change en marteau, active E. Tu le bats au corps à corps.",
-      cons: "Il poke fort. Reste derrière les sbires." },
-    { id: "Kennen", name: "Kennen", diff: "medium", img: "Kennen",
-      pros: "Ton Q suit son dash électrique. Fear-le hors de son ulti.",
-      cons: "Son stun est pénible. Prends de la ténacité." },
-    { id: "Gnar", name: "Gnar", diff: "medium", img: "Gnar",
-      pros: "Tue-le quand il est petit. Il est très fragile.",
-      cons: "En Méga-Gnar, il a beaucoup de CC. Attention au mur." },
-    { id: "Kayle", name: "Kayle", diff: "easy", img: "Kayle",
-      pros: "Abuse-la pré-6. Dive en boucle. Freeze la lane.",
-      cons: "Si la game dure 35 minutes, tu as perdu." },
-    { id: "Urgot", name: "Urgot", diff: "medium", img: "Urgot",
-      pros: "Ton R te permet de repasser au-dessus du seuil d'exécution.",
-      cons: "S'il te retourne (E), tu prends cher. Tourne autour de lui." },
+    // --- BRUISERS ---
+    { id: "Jax", name: "Jax", diff: "medium", img: "Jax", spells: ["Flash", "Barrier"],
+      pros: "Active E pendant son hélico. Fear-le avant le stun.",
+      cons: "Outscale fort. Ne laisse pas la game durer." },
+    { id: "Fiora", name: "Fiora", diff: "hard", img: "Fiora", spells: ["Flash", "Ignite"],
+      pros: "Colle-toi aux murs pour cacher tes points vitaux.",
+      cons: "Si elle pare (W) ton Fear, tu es mort." },
+    { id: "Renekton", name: "Renekton", diff: "medium", img: "Renekton", spells: ["Flash", "Barrier"],
+      pros: "Ton E tank son burst. Soigne-toi quand il n'a plus de rage.",
+      cons: "Son Z renforcé brise ton bouclier." },
+    { id: "Riven", name: "Riven", diff: "medium", img: "Riven", spells: ["Flash", "Barrier"],
+      pros: "E annule son burst. Fragile si fear.",
+      cons: "Trop mobile. Difficile à attraper." },
+    { id: "Irelia", name: "Irelia", diff: "hard", img: "Irelia", spells: ["Flash", "Barrier"],
+      pros: "Fear-la quand elle Q sur toi.",
+      cons: "4 stacks passif = danger de mort." },
+    { id: "Camille", name: "Camille", diff: "easy", img: "Camille", spells: ["Flash", "Barrier"],
+      pros: "Fear annule son grappin (E).",
+      cons: "Dégâts bruts en late game." },
+    { id: "Aatrox", name: "Aatrox", diff: "medium", img: "Aatrox", spells: ["Flash", "Ignite"],
+      pros: "Q-hold pour esquiver ses zones.",
+      cons: "Trop de soin. Anti-heal obligatoire." },
 
-    // --- LES SPECIAUX ---
-    { id: "Tryndamere", name: "Tryndamere", diff: "medium", img: "Tryndamere",
-      pros: "Tu peux kite son R avec ton Fear. Randuin le détruit.",
-      cons: "S'il a de la chatte sur les critiques niveau 1, ça peut mal tourner." },
-    { id: "Volibear", name: "Volibear", diff: "hard", img: "Volibear",
-      pros: "Esquive son E (foudre). Utilise E pour réduire son combo Q+W.",
-      cons: "Il se soigne autant que toi et a plus de burst. Très dur à tuer." },
-    { id: "Olaf", name: "Olaf", diff: "hard", img: "Olaf",
-      pros: "Attends ton niveau 3. Ne fight pas niveau 1.",
-      cons: "Son R annule ton R et ton E. C'est ton plus gros counter." },
-    { id: "Yorick", name: "Yorick", diff: "medium", img: "Yorick",
-      pros: "Tue ses goules avec tes auto-attaques pour l'or. Fuis sa cage.",
-      cons: "S'il te bloque dans la cage avec son R, tu vas prendre cher." },
-    { id: "Illaoi", name: "Illaoi", diff: "hard", img: "Illaoi",
-      pros: "Si elle rate E, fonce. Détruis ses tentacules.",
-      cons: "Si elle touche E + R, fuis IMMÉDIATEMENT." },
-    { id: "Nasus", name: "Nasus", diff: "easy", img: "Nasus",
-      pros: "Tu le domines totalement early. Empêche-le de stacker.",
-      cons: "Son W (Slow) réduit ta vitesse d'attaque. C'est l'enfer sans bottes de célérité." },
-    { id: "Mordekaiser", name: "Mordekaiser", diff: "medium", img: "Mordekaiser",
-      pros: "Q-hold pour esquiver son A. Tu gagnes le stat-check early.",
-      cons: "Dans son R, si tu rates tes sorts, il te vole tes stats et te tue." },
-    { id: "Yone", name: "Yone", diff: "easy", img: "Yone",
-      pros: "Il est fragile. Ton E le détruit quand il essaie de burst.",
-      cons: "Il a beaucoup de dash. Garde ton R pour quand il a utilisé son E." }
+    // --- TANKS ---
+    { id: "Malphite", name: "Malphite", diff: "easy", img: "Malphite", spells: ["Flash", "Barrier"],
+      pros: "Ne peut pas te tuer. Dive-le avec R.",
+      cons: "Plus utile en teamfight." },
+    { id: "Sion", name: "Sion", diff: "easy", img: "Sion", spells: ["Flash", "Barrier"],
+      pros: "Q-hold annule son A. Sac à PV pour toi.",
+      cons: "Revient toujours sur la lane." },
+    { id: "Ornn", name: "Ornn", diff: "medium", img: "Ornn", spells: ["Flash", "Teleport"],
+      pros: "Annule son R avec ton R.",
+      cons: "Très tanky et fait mal." },
+    { id: "Shen", name: "Shen", diff: "easy", img: "Shen", spells: ["Flash", "Teleport"],
+      pros: "Annule son R avec E ou R. Prends la tour.",
+      cons: "Sa zone W bloque tes attaques." },
+    { id: "TahmKench", name: "Tahm Kench", diff: "hard", img: "TahmKench", spells: ["Flash", "Barrier"],
+      pros: "Farm et attends le jungler.",
+      cons: "Te bat en stat-check. Attention à sa tour." },
+    { id: "Chogath", name: "Cho'Gath", diff: "medium", img: "Chogath", spells: ["Flash", "Barrier"],
+      pros: "Esquive son A (Q) avec vitesse.",
+      cons: "Son R t'exécute tôt." },
+    { id: "Mundo", name: "Dr. Mundo", diff: "easy", img: "DrMundo", spells: ["Flash", "Ignite"],
+      pros: "Ton soin bat le sien early.",
+      cons: "Prends anti-heal." },
+    { id: "KSante", name: "K'Sante", diff: "medium", img: "KSante", spells: ["Flash", "Ghost"],
+      pros: "Pas assez de dégâts pour te tuer early.",
+      cons: "Beaucoup de CC, attention aux murs." },
+
+    // --- RANGED ---
+    { id: "Vayne", name: "Vayne", diff: "hard", img: "Vayne", spells: ["Flash", "Ghost"],
+      pros: "Si tu touches R, elle meurt.",
+      cons: "Te kite à l'infini. Condemn (E) au mur = mort." },
+    { id: "Quinn", name: "Quinn", diff: "hard", img: "Quinn", spells: ["Flash", "Ghost"],
+      pros: "Niveau 6, suis-la avec passif.",
+      cons: "Aveuglement et saut t'empêchent de l'atteindre." },
+    { id: "Jayce", name: "Jayce", diff: "medium", img: "Jayce", spells: ["Flash", "Ghost"],
+      pros: "Si forme marteau, active E.",
+      cons: "Poke fort." },
+    { id: "Kennen", name: "Kennen", diff: "medium", img: "Kennen", spells: ["Flash", "Barrier"],
+      pros: "Q suit son dash. Fear-le hors ulti.",
+      cons: "Stun pénible. Prends ténacité." },
+    { id: "Gnar", name: "Gnar", diff: "medium", img: "Gnar", spells: ["Flash", "Ghost"],
+      pros: "Tue-le quand il est petit.",
+      cons: "Mega-Gnar a trop de CC." },
+    { id: "Kayle", name: "Kayle", diff: "easy", img: "Kayle", spells: ["Flash", "Ghost"],
+      pros: "Abuse-la pré-6. Dive boucle.",
+      cons: "Niveau 16 = Perdu." },
+    { id: "Urgot", name: "Urgot", diff: "medium", img: "Urgot", spells: ["Flash", "Barrier"],
+      pros: "R permet de regen au dessus seuil execute.",
+      cons: "Tourne autour de lui (passif)." },
+
+    // --- AUTRES ---
+    { id: "Tryndamere", name: "Tryndamere", diff: "medium", img: "Tryndamere", spells: ["Flash", "Barrier"],
+      pros: "Kite son R avec Fear. Randuin op.",
+      cons: "Chance critique niveau 1." },
+    { id: "Volibear", name: "Volibear", diff: "hard", img: "Volibear", spells: ["Flash", "Barrier"],
+      pros: "Esquive E (foudre).",
+      cons: "Se soigne trop et burst fort." },
+    { id: "Olaf", name: "Olaf", diff: "hard", img: "Olaf", spells: ["Flash", "Barrier"],
+      pros: "Ne fight pas niveau 1.",
+      cons: "R annule tes CC. Pire counter." },
+    { id: "Yorick", name: "Yorick", diff: "medium", img: "Yorick", spells: ["Flash", "Tp"],
+      pros: "Tue les goules. Fuis la cage.",
+      cons: "Bloqué dans cage = mort." },
+    { id: "Illaoi", name: "Illaoi", diff: "hard", img: "Illaoi", spells: ["Flash", "Barrier"],
+      pros: "Esquive E ou fuis.",
+      cons: "E + R = Mort instantanée." },
+    { id: "Nasus", name: "Nasus", diff: "easy", img: "Nasus", spells: ["Flash", "Ghost"],
+      pros: "Détruis-le early.",
+      cons: "Wither (W) casse ta vitesse d'attaque." },
+    { id: "Mordekaiser", name: "Mordekaiser", diff: "medium", img: "Mordekaiser", spells: ["Flash", "Barrier"],
+      pros: "Q-hold esquive son A.",
+      cons: "Te vole tes stats dans son R." },
+    { id: "Yone", name: "Yone", diff: "easy", img: "Yone", spells: ["Flash", "Barrier"],
+      pros: "Fragile. E le détruit.",
+      cons: "Garde R pour après son E." }
 ];
 
-// --- VARIABLES DOM ---
+// --- DOM ELEMENTS ---
 const grid = document.getElementById('grid');
 const search = document.getElementById('searchInput');
 const modal = document.getElementById('modal');
@@ -122,56 +126,144 @@ const mHeader = document.getElementById('modal-header');
 const mPros = document.getElementById('modal-pros');
 const mCons = document.getElementById('modal-cons');
 const mNotes = document.getElementById('user-notes');
+const mSpells = document.getElementById('summoner-spells');
 const saveBtn = document.getElementById('save-btn');
 const saveMsg = document.getElementById('save-msg');
 const closeBtn = document.querySelector('.close-btn');
-let currentId = null;
+const soundClick = document.getElementById('sound-click');
+// Import/Export
+const exportBtn = document.getElementById('export-btn');
+const importBtnTrig = document.getElementById('import-btn-trigger');
+const importFile = document.getElementById('import-file');
+
+// Etat des filtres
+let currentFilter = 'all';
 
 // --- FONCTIONS ---
 
-// Affichage
-function render(filter = "") {
+function playSound() {
+    // Joue le son si possible (peut être bloqué par le navigateur)
+    try { soundClick.currentTime = 0; soundClick.play(); } catch(e){}
+}
+
+function render(searchText = "") {
     grid.innerHTML = "";
-    data.filter(c => c.name.toLowerCase().includes(filter.toLowerCase())).forEach(c => {
+    
+    // Filtrage combiné (Texte + Difficulté)
+    const filtered = data.filter(c => {
+        const matchText = c.name.toLowerCase().includes(searchText.toLowerCase());
+        const matchDiff = currentFilter === 'all' || c.diff === currentFilter;
+        return matchText && matchDiff;
+    });
+
+    filtered.forEach(c => {
         const div = document.createElement('div');
         div.className = 'card';
-        // Utilisation des images officielles Riot
         div.innerHTML = `
             <img src="https://ddragon.leagueoflegends.com/cdn/img/champion/splash/${c.img}_0.jpg" loading="lazy">
             <span class="difficulty ${c.diff}">${c.diff.toUpperCase()}</span>
             <h3>${c.name}</h3>
         `;
-        div.onclick = () => openModal(c);
+        div.onclick = () => { playSound(); openModal(c); };
         grid.appendChild(div);
     });
 }
 
-// Modal & Notes
 function openModal(c) {
-    currentId = c.id;
+    // Contenu Textuel
     mTitle.innerText = c.name.toUpperCase();
     mHeader.style.backgroundImage = `url('https://ddragon.leagueoflegends.com/cdn/img/champion/splash/${c.img}_0.jpg')`;
     mPros.innerText = c.pros;
     mCons.innerText = c.cons;
+
+    // Affichage des sorts
+    mSpells.innerHTML = c.spells.map(spell => 
+        `<img src="${spellUrl(spell)}" class="spell-icon" title="${spell}">`
+    ).join('');
     
-    // Récupérer la note sauvegardée dans le navigateur
+    // Notes Perso
     mNotes.value = localStorage.getItem(`ww_note_${c.id}`) || "";
     
     modal.style.display = "block";
     saveMsg.style.opacity = "0";
 }
 
-// Sauvegarde
+// Gestion des Filtres
+function filterData(type) {
+    currentFilter = type;
+    
+    // Mise à jour visuelle des boutons
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if(btn.classList.contains(type) || (type==='all' && !btn.classList.contains('easy') && !btn.classList.contains('medium') && !btn.classList.contains('hard'))) {
+            btn.classList.add('active');
+        }
+    });
+
+    render(search.value);
+}
+
+// --- IMPORT / EXPORT (JSON) ---
+
+// 1. Export
+exportBtn.onclick = () => {
+    // On rassemble toutes les notes qui commencent par 'ww_note_'
+    let exportData = {};
+    for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key.startsWith('ww_note_')) {
+            exportData[key] = localStorage.getItem(key);
+        }
+    }
+    
+    // Création du fichier
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportData));
+    const downloadAnchor = document.createElement('a');
+    downloadAnchor.setAttribute("href", dataStr);
+    downloadAnchor.setAttribute("download", "warwick_notes_backup.json");
+    document.body.appendChild(downloadAnchor);
+    downloadAnchor.click();
+    downloadAnchor.remove();
+};
+
+// 2. Import
+importBtnTrig.onclick = () => importFile.click();
+
+importFile.onchange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+        try {
+            const importedData = JSON.parse(event.target.result);
+            // On sauvegarde dans le localStorage
+            Object.keys(importedData).forEach(key => {
+                if(key.startsWith('ww_note_')) {
+                    localStorage.setItem(key, importedData[key]);
+                }
+            });
+            alert("Notes importées avec succès !");
+            location.reload(); // Recharger pour afficher les notes
+        } catch(err) {
+            alert("Erreur lors de la lecture du fichier.");
+        }
+    };
+    reader.readAsText(file);
+};
+
+// --- EVENTS ---
 saveBtn.onclick = () => {
-    if(currentId) {
-        localStorage.setItem(`ww_note_${currentId}`, mNotes.value);
+    const champName = mTitle.innerText.charAt(0) + mTitle.innerText.slice(1).toLowerCase(); // Récupérer le nom proprement c'est dur ici, on utilise le titre modal converti ou une variable globale
+    // On va plutôt utiliser une variable globale pour l'ID, plus sûr
+    const currentC = data.find(c => c.name.toUpperCase() === mTitle.innerText);
+    if(currentC) {
+        localStorage.setItem(`ww_note_${currentC.id}`, mNotes.value);
         saveMsg.style.opacity = "1";
-        // Petit délai pour effacer le message
         setTimeout(() => { saveMsg.style.opacity = "0"; }, 2000);
     }
 };
 
-// Events
 search.oninput = (e) => render(e.target.value);
 closeBtn.onclick = () => modal.style.display = "none";
 window.onclick = (e) => { if(e.target == modal) modal.style.display = "none"; };
