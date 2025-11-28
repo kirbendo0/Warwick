@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Warwick Top - Tracker</title>
+    <title>Warwick Top - Tracker v2</title>
     <link href="https://fonts.googleapis.com/css2?family=Anton&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -28,6 +28,7 @@
             background-position: center;
             background-attachment: fixed;
             transition: background-image 0.5s ease-in-out;
+            /* Padding bottom retiré car plus de footer */
         }
 
         .bg-overlay {
@@ -37,7 +38,6 @@
 
         header { text-align: center; padding: 40px 20px; position: relative; }
 
-        /* Skin Selector */
         .skin-selector {
             position: absolute; top: 20px; right: 20px;
             background: rgba(0,0,0,0.8); border: 1px solid var(--green); color: var(--green);
@@ -50,7 +50,6 @@
         }
         .green { color: var(--green); }
 
-        /* Search & Filters */
         .search-box { position: relative; max-width: 500px; margin: 0 auto 30px auto; }
         .search-box input {
             width: 100%; padding: 15px 50px 15px 25px; border-radius: 50px;
@@ -59,17 +58,17 @@
         .search-box input:focus { border-color: var(--green); box-shadow: 0 0 15px var(--green); }
         .search-box i { position: absolute; right: 25px; top: 50%; transform: translateY(-50%); color: var(--green); }
 
-        .filters { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
-        .filter-btn {
+        /* NOUVEAUX BOUTONS DE TRI */
+        .sorting-controls { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-bottom: 20px; }
+        .sort-btn {
             background: rgba(0,0,0,0.6); border: 2px solid #444; color: #888;
             padding: 10px 25px; font-family: 'Anton', sans-serif; font-size: 1.1rem;
             cursor: pointer; transition: 0.3s; border-radius: 4px; text-transform: uppercase;
+            display: flex; align-items: center; gap: 10px;
         }
-        .filter-btn:hover { transform: translateY(-3px); color: white; border-color: white; }
-        .filter-btn.active { background: white; color: black; border-color: white; }
-        .filter-btn.easy:hover, .filter-btn.easy.active { border-color: var(--green); color: var(--green); background: black; }
-        .filter-btn.medium:hover, .filter-btn.medium.active { border-color: var(--yellow); color: var(--yellow); background: black; }
-        .filter-btn.hard:hover, .filter-btn.hard.active { border-color: var(--red); color: var(--red); background: black; }
+        .sort-btn:hover { transform: translateY(-3px); color: white; border-color: white; }
+        .sort-btn.active { background: #111; color: var(--green); border-color: var(--green); box-shadow: 0 0 15px var(--green); }
+        .sort-icon { font-size: 0.9rem; }
 
         /* Grid */
         #grid {
@@ -86,10 +85,11 @@
         .card h3 { padding: 15px; text-align: center; font-family: 'Anton'; font-size: 1.5rem; letter-spacing: 1px; margin: 0; }
         
         .card-wr-badge {
-            position: absolute; bottom: 10px; right: 10px; font-size: 0.8rem; font-weight: bold;
-            color: #aaa; background: rgba(0,0,0,0.8); padding: 2px 5px; border-radius: 3px;
+            position: absolute; bottom: 10px; right: 10px; font-size: 0.9rem; font-weight: bold;
+            color: var(--green); background: rgba(0,0,0,0.9); padding: 4px 8px; border-radius: 4px; border: 1px solid var(--green);
         }
 
+        /* Badge difficulté conservé pour l'info, mais plus de filtre */
         .difficulty {
             position: absolute; top: 10px; right: 10px; padding: 5px 10px; font-size: 0.8rem; font-weight: bold;
             border-radius: 4px; text-transform: uppercase; color: black;
@@ -139,14 +139,9 @@
         .close-btn { position: absolute; top: 20px; right: 30px; font-size: 40px; cursor: pointer; color: white; z-index: 10; transition: 0.2s; }
         .close-btn:hover { color: var(--green); }
 
-        /* SCOREBOARD / STATS BAR - Nouveau design très visible */
         .scoreboard-bar {
-            background: #1a1a1a;
-            border-bottom: 1px solid #333;
-            padding: 15px 30px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+            background: #1a1a1a; border-bottom: 1px solid #333; padding: 15px 30px;
+            display: flex; align-items: center; justify-content: space-between;
         }
         .stats-display { font-family: 'Anton'; font-size: 1.8rem; color: #fff; }
         .stats-display span { font-size: 1rem; color: #777; font-family: 'Roboto'; margin-left: 10px; }
@@ -158,12 +153,10 @@
         }
         .btn-win { background: #00b894; border: 2px solid #00b894; }
         .btn-win:hover { background: #00a382; transform: scale(1.05); }
-        
         .btn-lose { background: #d63031; border: 2px solid #d63031; }
         .btn-lose:hover { background: #c0392b; transform: scale(1.05); }
 
         .modal-body { padding: 30px; display: flex; flex-direction: column; gap: 20px; }
-
         .main-content { display: flex; gap: 30px; }
         .strategy-section { flex: 1; }
         .notes-section { flex: 1; display: flex; flex-direction: column; }
@@ -178,6 +171,8 @@
         #save-btn { width: 100%; padding: 15px; background: var(--green); color: black; border: none; font-weight: bold; cursor: pointer; font-family: 'Anton'; font-size: 1.2rem; transition: 0.3s; }
         #save-btn:hover { background: white; }
         #save-msg { display: block; text-align: center; color: var(--green); margin-top: 10px; opacity: 0; transition: 0.3s; }
+
+        /* Footer supprimé */
 
         @media (max-width: 800px) {
             .main-content { flex-direction: column; }
@@ -208,11 +203,13 @@
             <input type="text" id="searchInput" placeholder="Chercher un champion...">
         </div>
 
-        <div class="filters">
-            <button class="filter-btn active" onclick="filterData('all')">TOUT VOIR</button>
-            <button class="filter-btn easy" onclick="filterData('easy')">FACILE</button>
-            <button class="filter-btn medium" onclick="filterData('medium')">MOYEN</button>
-            <button class="filter-btn hard" onclick="filterData('hard')">ENFER</button>
+        <div class="sorting-controls">
+            <button class="sort-btn active" id="sort-name" onclick="sortData('name')">
+                <i class="fas fa-font sort-icon"></i> A-Z
+            </button>
+            <button class="sort-btn" id="sort-wr" onclick="sortData('wr')">
+                <i class="fas fa-trophy sort-icon"></i> WINRATE %
+            </button>
         </div>
     </header>
 
@@ -273,126 +270,86 @@
         const data = [
             { id: "Darius", name: "Darius", diff: "hard", img: "Darius", spells: ["Flash", "Barrier"], ult: "120s / 100s / 80s", cheese: false,
               pros: "Gagne les courts trades si tu esquives son A (Q) externe.", cons: "5 stacks = mort." },
-              
             { id: "Singed", name: "Singed", diff: "medium", img: "Singed", spells: ["Flash", "Ghost"], ult: "120s / 110s / 100s", cheese: false,
               pros: "Ignore son proxy, farme sous tour. R pour le rattraper.", cons: "Ne le poursuis jamais dans le poison. Anti-heal." },
-
             { id: "Gwen", name: "Gwen", diff: "medium", img: "Gwen", spells: ["Flash", "Ignite"], ult: "120s / 100s / 80s", cheese: true,
               pros: "Tu la bats early. Esquive le centre du Q.", cons: "Outscale énorme. W (Brume) annule ton R de loin." },
-
             { id: "Pantheon", name: "Pantheon", diff: "easy", img: "Pantheon", spells: ["Flash", "Ignite"], ult: "180s / 165s / 150s", cheese: false,
               pros: "Ton E tank son combo complet. Tu régènes son poke.", cons: "Son E bloque tes attaques." },
-
             { id: "Rumble", name: "Rumble", diff: "medium", img: "Rumble", spells: ["Flash", "Ignite"], ult: "100s / 85s / 70s", cheese: false,
               pros: "Crains-le quand il a sa barre jaune/rouge. Sinon fonce.", cons: "Dégâts énormes sans items." },
-
             { id: "Gragas", name: "Gragas", diff: "medium", img: "Gragas", spells: ["Flash", "Teleport"], ult: "120s / 100s / 80s", cheese: false,
               pros: "Q-hold son Dash (E) pour passer derrière.", cons: "Trop de sustain, dur à tuer. Phase Rush recommandé." },
-
             { id: "Garen", name: "Garen", diff: "medium", img: "Garen", spells: ["Flash", "Barrier"], ult: "120s / 100s / 80s", cheese: false,
               pros: "Utilise E quand il fonce. Heal sur sbires.", cons: "R + Ignite t'exécute de loin." },
-              
             { id: "Teemo", name: "Teemo", diff: "easy", img: "Teemo", spells: ["Flash", "Ignite"], ult: "30s / 25s / 20s", cheese: false,
               pros: "Lvl 6 : R + Ignite = Kill. Q suit son Flash.", cons: "Blind empêche le soin." },
-              
             { id: "Sett", name: "Sett", diff: "hard", img: "Sett", spells: ["Flash", "Barrier"], ult: "120s / 100s / 80s", cheese: false,
               pros: "Q-hold pour passer derrière son Z.", cons: "Burst énorme." },
-
             { id: "Jax", name: "Jax", diff: "medium", img: "Jax", spells: ["Flash", "Barrier"], ult: "80s (Flat)", cheese: false,
               pros: "Active E pendant son hélico.", cons: "Outscale très fort." },
-              
             { id: "Fiora", name: "Fiora", diff: "hard", img: "Fiora", spells: ["Flash", "Ignite"], ult: "110s / 90s / 70s", cheese: true,
               pros: "Colle-toi aux murs. Cheese lvl 1 possible.", cons: "Si elle pare ton Fear, tu es mort." },
-              
             { id: "Renekton", name: "Renekton", diff: "medium", img: "Renekton", spells: ["Flash", "Barrier"], ult: "120s (Flat)", cheese: false,
               pros: "Ton E tank son burst.", cons: "Son Z renforcé brise ton bouclier." },
-              
             { id: "Riven", name: "Riven", diff: "medium", img: "Riven", spells: ["Flash", "Barrier"], ult: "120s / 90s / 60s", cheese: true,
               pros: "Ton E annule son burst. Cheese lvl 1 si elle Q3 vide.", cons: "Trop mobile." },
-              
             { id: "Irelia", name: "Irelia", diff: "hard", img: "Irelia", spells: ["Flash", "Barrier"], ult: "140s / 120s / 100s", cheese: true,
               pros: "Fear-la quand elle Q. Cheese lvl 1.", cons: "Si elle a 4 stacks, ne fight pas." },
-              
             { id: "Camille", name: "Camille", diff: "easy", img: "Camille", spells: ["Flash", "Barrier"], ult: "140s / 115s / 90s", cheese: true,
               pros: "Ton Fear annule son E.", cons: "Dégâts bruts late game." },
-              
             { id: "Aatrox", name: "Aatrox", diff: "medium", img: "Aatrox", spells: ["Flash", "Ignite"], ult: "120s / 100s / 80s", cheese: false,
               pros: "Q-hold pour esquiver ses zones.", cons: "Anti-heal obligatoire." },
-
             { id: "Malphite", name: "Malphite", diff: "easy", img: "Malphite", spells: ["Flash", "Barrier"], ult: "130s / 105s / 80s", cheese: false,
               pros: "Dive-le avec R.", cons: "Utile en teamfight." },
-              
             { id: "Sion", name: "Sion", diff: "easy", img: "Sion", spells: ["Flash", "Barrier"], ult: "140s / 100s / 60s", cheese: true,
               pros: "Q-hold annule son A. Cheese lvl 1.", cons: "Revient toujours." },
-              
             { id: "Ornn", name: "Ornn", diff: "medium", img: "Ornn", spells: ["Flash", "Teleport"], ult: "140s / 120s / 100s", cheese: false,
               pros: "Annule son R avec ton R.", cons: "Très tanky." },
-              
             { id: "Shen", name: "Shen", diff: "easy", img: "Shen", spells: ["Flash", "Teleport"], ult: "200s / 180s / 160s", cheese: false,
               pros: "Annule son R avec E.", cons: "Sa zone W bloque tes attaques." },
-              
             { id: "TahmKench", name: "Tahm Kench", diff: "hard", img: "TahmKench", spells: ["Flash", "Barrier"], ult: "120s / 100s / 80s", cheese: false,
               pros: "Farm.", cons: "Te bat en duel." },
-              
             { id: "Chogath", name: "Cho'Gath", diff: "medium", img: "Chogath", spells: ["Flash", "Barrier"], ult: "80s (Flat)", cheese: false,
               pros: "Esquive son Q.", cons: "R t'exécute tôt." },
-              
             { id: "Mundo", name: "Dr. Mundo", diff: "easy", img: "DrMundo", spells: ["Flash", "Ignite"], ult: "110s (Flat)", cheese: true,
               pros: "Ton soin bat le sien. Cheese lvl 1.", cons: "Prends anti-heal." },
-              
             { id: "KSante", name: "K'Sante", diff: "medium", img: "KSante", spells: ["Flash", "Ghost"], ult: "120s / 100s / 80s", cheese: false,
               pros: "Pas assez de dégâts early.", cons: "Beaucoup de CC." },
-
             { id: "Vayne", name: "Vayne", diff: "hard", img: "Vayne", spells: ["Flash", "Ghost"], ult: "100s / 85s / 70s", cheese: false,
               pros: "Si tu touches R, elle meurt.", cons: "Te kite à l'infini." },
-              
             { id: "Quinn", name: "Quinn", diff: "hard", img: "Quinn", spells: ["Flash", "Ghost"], ult: "140s / 115s / 90s", cheese: false,
               pros: "Suis-la avec passif.", cons: "Aveuglement." },
-              
             { id: "Jayce", name: "Jayce", diff: "medium", img: "Jayce", spells: ["Flash", "Ghost"], ult: "N/A", cheese: false,
               pros: "Active E s'il passe marteau.", cons: "Poke fort." },
-              
             { id: "Kennen", name: "Kennen", diff: "medium", img: "Kennen", spells: ["Flash", "Barrier"], ult: "120s", cheese: false,
               pros: "Q suit son dash.", cons: "Stun pénible." },
-              
             { id: "Gnar", name: "Gnar", diff: "medium", img: "Gnar", spells: ["Flash", "Ghost"], ult: "90s / 60s / 30s", cheese: false,
               pros: "Tue-le petit.", cons: "Mega-Gnar CC." },
-              
             { id: "Kayle", name: "Kayle", diff: "easy", img: "Kayle", spells: ["Flash", "Ghost"], ult: "160s / 120s / 80s", cheese: true,
               pros: "Abuse-la pré-6. Dive.", cons: "Niveau 16 = Perdu." },
-              
             { id: "Urgot", name: "Urgot", diff: "medium", img: "Urgot", spells: ["Flash", "Barrier"], ult: "100s / 85s / 70s", cheese: false,
               pros: "R permet de regen au dessus execute.", cons: "Tourne autour." },
-
             { id: "Tryndamere", name: "Tryndamere", diff: "medium", img: "Tryndamere", spells: ["Flash", "Barrier"], ult: "130s / 110s / 90s", cheese: false,
               pros: "Kite son R avec Fear.", cons: "Critique lvl 1." },
-              
             { id: "Volibear", name: "Volibear", diff: "hard", img: "Volibear", spells: ["Flash", "Barrier"], ult: "160s / 140s / 120s", cheese: false,
               pros: "Esquive E.", cons: "Se soigne autant que toi." },
-              
             { id: "Olaf", name: "Olaf", diff: "hard", img: "Olaf", spells: ["Flash", "Barrier"], ult: "100s / 90s / 80s", cheese: false,
               pros: "Ne fight pas lvl 1.", cons: "R annule tes CC." },
-              
             { id: "Yorick", name: "Yorick", diff: "medium", img: "Yorick", spells: ["Flash", "Tp"], ult: "160s / 130s / 100s", cheese: false,
               pros: "Tue les goules.", cons: "Bloqué dans cage = mort." },
-              
             { id: "Illaoi", name: "Illaoi", diff: "hard", img: "Illaoi", spells: ["Flash", "Barrier"], ult: "120s / 105s / 90s", cheese: false,
               pros: "Esquive E.", cons: "E + R = Mort." },
-              
             { id: "Nasus", name: "Nasus", diff: "easy", img: "Nasus", spells: ["Flash", "Ghost"], ult: "120s", cheese: true,
               pros: "Détruis-le early.", cons: "Wither (W) casse ta vitesse." },
-              
             { id: "Mordekaiser", name: "Mordekaiser", diff: "medium", img: "Mordekaiser", spells: ["Flash", "Barrier"], ult: "140s / 120s / 100s", cheese: false,
               pros: "Q-hold esquive son A.", cons: "Te vole tes stats." },
-              
             { id: "Yone", name: "Yone", diff: "easy", img: "Yone", spells: ["Flash", "Barrier"], ult: "120s / 100s / 80s", cheese: true,
               pros: "Fragile. E le détruit.", cons: "Garde R pour après son E." },
-              
             { id: "Akali", name: "Akali", diff: "hard", img: "Akali", spells: ["Flash", "Barrier"], ult: "100s / 80s / 60s", cheese: false,
               pros: "Révèle-la avec R.", cons: "W (Linceul) annule tes attaques." }
         ];
 
-        // --- DOM ---
         const grid = document.getElementById('grid');
         const search = document.getElementById('searchInput');
         const modal = document.getElementById('modal');
@@ -408,8 +365,12 @@
         const saveMsg = document.getElementById('save-msg');
         const closeBtn = document.querySelector('.close-btn');
         const statsDisplay = document.getElementById('stats-display');
+        const sortNameBtn = document.getElementById('sort-name');
+        const sortWrBtn = document.getElementById('sort-wr');
 
-        let currentFilter = 'all';
+        // Sorting state: 'name' or 'wr', direction: 'asc' or 'desc'
+        let sortBy = 'name';
+        let sortDirection = 'asc';
         let currentId = null;
 
         // --- FONCTIONS ---
@@ -418,14 +379,48 @@
             document.body.style.backgroundImage = `url('https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Warwick_${skinId}.jpg')`;
         }
 
+        function sortData(criteria) {
+            // Toggle direction if clicking same criteria
+            if (sortBy === criteria) {
+                sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+            } else {
+                sortBy = criteria;
+                // Default direction for WR is descending (highest first), for name is ascending (A-Z)
+                sortDirection = criteria === 'wr' ? 'desc' : 'asc';
+            }
+
+            // Update UI
+            sortNameBtn.classList.toggle('active', criteria === 'name');
+            sortWrBtn.classList.toggle('active', criteria === 'wr');
+
+            render(search.value);
+        }
+
         function render(filterText = "") {
             if(!grid) return;
             grid.innerHTML = "";
-            const filtered = data.filter(c => {
-                const matchText = c.name.toLowerCase().includes(filterText.toLowerCase());
-                const matchDiff = currentFilter === 'all' || c.diff === currentFilter;
-                return matchText && matchDiff;
+            
+            // 1. Filter
+            let filtered = data.filter(c => c.name.toLowerCase().includes(filterText.toLowerCase()));
+
+            // 2. Prepare for sorting (add WR to object temporarily)
+            filtered = filtered.map(c => {
+                const s = getStats(c.id);
+                const total = s.wins + s.losses;
+                // WR numerical value for sorting. -1 puts unplayed champs at the bottom in desc sort.
+                const wrValue = total > 0 ? (s.wins / total) * 100 : -1; 
+                return { ...c, wrValue };
             });
+
+            // 3. Sort
+            filtered.sort((a, b) => {
+                if (sortBy === 'name') {
+                    return sortDirection === 'asc' ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name);
+                } else if (sortBy === 'wr') {
+                    return sortDirection === 'asc' ? a.wrValue - b.wrValue : b.wrValue - a.wrValue;
+                }
+            });
+
 
             if (filtered.length === 0) {
                 grid.innerHTML = "<p style='text-align:center; width:100%; color:#555;'>Aucun champion trouvé.</p>";
@@ -436,15 +431,14 @@
                 const div = document.createElement('div');
                 div.className = 'card';
                 
-                // Get Stats for Badge
-                const s = getStats(c.id);
-                const wr = (s.wins + s.losses) > 0 ? Math.round((s.wins / (s.wins + s.losses)) * 100) + "%" : "-";
+                // Display WR string
+                const wrDisplay = c.wrValue >= 0 ? Math.round(c.wrValue) + "%" : "-";
                 
                 const cheeseHtml = c.cheese ? '<div class="cheese-icon" title="Win Level 1">🧀</div>' : '';
                 
                 div.innerHTML = `
                     ${cheeseHtml}
-                    <div class="card-wr-badge">${wr} WR</div>
+                    <div class="card-wr-badge">${wrDisplay} WR</div>
                     <img src="https://ddragon.leagueoflegends.com/cdn/img/champion/splash/${c.img}_0.jpg" loading="lazy">
                     <span class="difficulty ${c.diff}">${c.diff.toUpperCase()}</span>
                     <h3>${c.name}</h3>
@@ -452,18 +446,6 @@
                 div.onclick = () => openModal(c);
                 grid.appendChild(div);
             });
-        }
-
-        function filterData(type) {
-            currentFilter = type;
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.classList.remove('active');
-                if(btn.classList.contains(type) || (type === 'all' && !['easy', 'medium', 'hard'].some(cls => btn.classList.contains(cls)))) {
-                    if(type === 'all' && btn.innerText === "TOUT VOIR") btn.classList.add('active');
-                    if(type !== 'all' && btn.classList.contains(type)) btn.classList.add('active');
-                }
-            });
-            render(search.value);
         }
 
         function openModal(c) {
@@ -493,7 +475,7 @@
         function saveStats(id, stats) {
             localStorage.setItem(`ww_stats_${id}`, JSON.stringify(stats));
             updateStatsUI(id);
-            render(search.value); // Update Grid Badge
+            render(search.value); // Re-render to update grid badges and sorting
         }
 
         function updateStatsUI(id) {
@@ -501,12 +483,11 @@
             const total = s.wins + s.losses;
             const wr = total > 0 ? Math.round((s.wins / total) * 100) : 0;
             
-            // Couleur WR
             let color = "#fff";
             if(total > 0) {
-                if(wr >= 55) color = "#2ecc71"; // Green
-                else if(wr < 45) color = "#e74c3c"; // Red
-                else color = "#f1c40f"; // Yellow
+                if(wr >= 55) color = "#2ecc71";
+                else if(wr < 45) color = "#e74c3c";
+                else color = "#f1c40f";
             }
 
             statsDisplay.innerHTML = `<span style="color:${color}; font-size:1.8rem; margin:0;">${wr}% WR</span> <span>(${s.wins}V - ${s.losses}D)</span>`;
@@ -538,6 +519,7 @@
         closeBtn.onclick = () => modal.style.display = "none";
         window.onclick = (e) => { if(e.target == modal) modal.style.display = "none"; };
 
+        // Initial render
         render();
     </script>
 </body>
