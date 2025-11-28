@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Warwick Top - Guide & Tracker</title>
+    <title>Warwick Top - Ultimate Tracker</title>
     <link href="https://fonts.googleapis.com/css2?family=Anton&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -68,6 +68,7 @@
         .sort-btn.active { background: #111; color: var(--green); border-color: var(--green); box-shadow: 0 0 15px var(--green); }
         .sort-icon { font-size: 0.9rem; }
 
+        /* Grid */
         #grid {
             display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
             gap: 30px; padding: 20px 50px; max-width: 1400px; margin: 0 auto;
@@ -130,7 +131,7 @@
         }
         
         /* Quand actif : bordure rouge */
-        .spell-wrapper.active-cd { border-color: red; box-shadow: 0 0 10px red; }
+        .spell-wrapper.active-cd { border-color: red; box-shadow: 0 0 15px red; }
 
         .spell-icon { width: 100%; height: 100%; display: block; }
         
@@ -289,8 +290,16 @@
         let activeTimers = {};
 
         const data = [
-            { id: "Yasuo", name: "Yasuo", diff: "medium", img: "Yasuo", spells: ["Flash", "Ignite"], ult: "80s / 55s / 30s", cheese: false, pros: "Ton E réduit ses dégâts critiques. Ton R traverse son mur.", cons: "Il dash partout dans tes sbires. Son passif tank une attaque." },
+            // NOUVEAU CHAMPION 2025
+            { id: "Zaahen", name: "Zaheen", diff: "hard", img: "Zaahen", spells: ["Flash", "Ignite"], ult: "140s / 120s / 100s", cheese: false,
+              pros: "Ton E (Fear) brise son rythme d'auto-attaques. Si tu survis à son burst passif, tu gagnes sur la durée.",
+              cons: "Son Revive (Passif) est trompeur. Ne le dive pas s'il a sa jauge pleine. Il scale très fort." },
+            
+            // AJOUTS DEMANDÉS
+            { id: "Yasuo", name: "Yasuo", diff: "medium", img: "Yasuo", spells: ["Flash", "Ignite"], ult: "80s / 55s / 30s", cheese: false, pros: "Ton E réduit ses dégâts critiques. Ton R et E traversent son mur.", cons: "Il dash partout dans tes sbires. Son passif tank une attaque." },
             { id: "Zac", name: "Zac", diff: "easy", img: "Zac", spells: ["Flash", "Teleport"], ult: "130s / 115s / 100s", cheese: false, pros: "Un sac à PV pour toi. Facile à toucher.", cons: "Prends l'anti-heal. Attention aux ganks avec son saut (E)." },
+            
+            // LISTE CLASSIQUE
             { id: "Darius", name: "Darius", diff: "hard", img: "Darius", spells: ["Flash", "Barrier"], ult: "120s / 100s / 80s", cheese: false, pros: "Gagne les courts trades si tu esquives son A (Q) externe.", cons: "5 stacks = mort." },
             { id: "Singed", name: "Singed", diff: "medium", img: "Singed", spells: ["Flash", "Ghost"], ult: "120s / 110s / 100s", cheese: false, pros: "Ignore son proxy, farme sous tour. R pour le rattraper.", cons: "Ne le poursuis jamais dans le poison. Anti-heal." },
             { id: "Gwen", name: "Gwen", diff: "medium", img: "Gwen", spells: ["Flash", "Ignite"], ult: "120s / 100s / 80s", cheese: true, pros: "Tu la bats early. Esquive le centre du Q.", cons: "Outscale énorme. W (Brume) annule ton R de loin." },
@@ -401,10 +410,14 @@
                 div.className = 'card';
                 const wrDisplay = c.wrValue >= 0 ? Math.round(c.wrValue) + "%" : "-";
                 const cheeseHtml = c.cheese ? '<div class="cheese-icon" title="Win Level 1">🧀</div>' : '';
+                
+                // FALLBACK IMAGE SI ZAAHEN N'EXISTE PAS ENCORE DANS L'API
                 div.innerHTML = `
                     ${cheeseHtml}
                     <div class="card-wr-badge">${wrDisplay} WR</div>
-                    <img src="https://ddragon.leagueoflegends.com/cdn/img/champion/splash/${c.img}_0.jpg" loading="lazy">
+                    <img src="https://ddragon.leagueoflegends.com/cdn/img/champion/splash/${c.img}_0.jpg" 
+                         loading="lazy" 
+                         onerror="this.src='https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Aatrox_0.jpg'">
                     <span class="difficulty ${c.diff}">${c.diff.toUpperCase()}</span>
                     <h3>${c.name}</h3>
                 `;
@@ -416,7 +429,17 @@
         function openModal(c) {
             currentId = c.id;
             mTitle.innerText = c.name.toUpperCase();
-            mHeader.style.backgroundImage = `url('https://ddragon.leagueoflegends.com/cdn/img/champion/splash/${c.img}_0.jpg')`;
+            
+            // Image Header (avec fallback aussi si besoin)
+            const imgUrl = `https://ddragon.leagueoflegends.com/cdn/img/champion/splash/${c.img}_0.jpg`;
+            // Astuce pour vérifier l'image en fond css c'est dur, donc on laisse le navigateur gérer ou on met Aatrox si c'est Zaheen
+            if(c.id === "Zaahen") {
+                 // Fallback manuel pour le header car CSS background ne gère pas onerror facilement
+                 mHeader.style.backgroundImage = `url('https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Aatrox_0.jpg')`; 
+            } else {
+                 mHeader.style.backgroundImage = `url('${imgUrl}')`;
+            }
+
             mPros.innerText = c.pros;
             mCons.innerText = c.cons;
             
@@ -455,9 +478,8 @@
         }
 
         function updateSpellUI(champId, spell) {
-            // UI MODAL
-            const modalWrapper = document.getElementById(`spell-btn-${spell}`);
-            const modalOverlay = document.getElementById(`timer-overlay-${spell}`);
+            const wrapper = document.getElementById(`spell-btn-${spell}`);
+            const overlay = document.getElementById(`timer-overlay-${spell}`);
             
             const timerKey = `${champId}_${spell}`;
             const timerData = activeTimers[timerKey];
@@ -465,23 +487,23 @@
             if(window[`interval_${timerKey}`]) clearInterval(window[`interval_${timerKey}`]);
 
             if (timerData && timerData.endTime > Date.now()) {
-                if(modalWrapper) modalWrapper.classList.add('active-cd');
+                if(wrapper) wrapper.classList.add('active-cd');
                 
                 const tick = () => {
                     const remaining = Math.ceil((timerData.endTime - Date.now()) / 1000);
                     if(remaining <= 0) {
                         delete activeTimers[timerKey];
-                        if(modalWrapper) modalWrapper.classList.remove('active-cd');
+                        if(wrapper) wrapper.classList.remove('active-cd');
                         clearInterval(window[`interval_${timerKey}`]);
                     } else {
-                        if(modalOverlay) modalOverlay.innerText = remaining;
+                        if(overlay) overlay.innerText = remaining;
                     }
                 };
                 
                 tick();
                 window[`interval_${timerKey}`] = setInterval(tick, 1000);
             } else {
-                if(modalWrapper) modalWrapper.classList.remove('active-cd');
+                if(wrapper) wrapper.classList.remove('active-cd');
             }
         }
 
