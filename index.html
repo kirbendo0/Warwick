@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Warwick Top - Tracker & Guide</title>
+    <title>Warwick Top - Tracker</title>
     <link href="https://fonts.googleapis.com/css2?family=Anton&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -23,7 +23,6 @@
             font-family: 'Roboto', sans-serif;
             color: var(--text);
             min-height: 100vh;
-            padding-bottom: 80px;
             background-image: url('https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Warwick_0.jpg');
             background-size: cover;
             background-position: center;
@@ -33,7 +32,7 @@
 
         .bg-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.75); z-index: -1; pointer-events: none;
+            background: rgba(0, 0, 0, 0.8); z-index: -1; pointer-events: none;
         }
 
         header { text-align: center; padding: 40px 20px; position: relative; }
@@ -86,7 +85,6 @@
         .card img { width: 100%; height: 140px; object-fit: cover; object-position: top; border-bottom: 2px solid var(--green); }
         .card h3 { padding: 15px; text-align: center; font-family: 'Anton'; font-size: 1.5rem; letter-spacing: 1px; margin: 0; }
         
-        /* Stats Badge sur la carte (Mini WR) */
         .card-wr-badge {
             position: absolute; bottom: 10px; right: 10px; font-size: 0.8rem; font-weight: bold;
             color: #aaa; background: rgba(0,0,0,0.8); padding: 2px 5px; border-radius: 3px;
@@ -117,7 +115,7 @@
 
         #modal-header {
             height: 200px; background-size: cover; background-position: center; position: relative;
-            padding: 30px; border-bottom: 2px solid var(--green); display: flex; flex-direction: column; justify-content: flex-end;
+            padding: 20px; border-bottom: 2px solid var(--green); display: flex; flex-direction: column; justify-content: flex-end;
         }
         #modal-header::after { content:''; position: absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(to top, #111, transparent); }
 
@@ -141,26 +139,31 @@
         .close-btn { position: absolute; top: 20px; right: 30px; font-size: 40px; cursor: pointer; color: white; z-index: 10; transition: 0.2s; }
         .close-btn:hover { color: var(--green); }
 
-        .modal-body { padding: 30px; display: flex; flex-direction: column; gap: 20px; }
-        
-        /* SECTION STATS */
-        .stats-container {
-            background: #1a1a1a; padding: 15px; border-radius: 5px; border: 1px solid #333;
-            display: flex; justify-content: space-between; align-items: center;
+        /* SCOREBOARD / STATS BAR - Nouveau design très visible */
+        .scoreboard-bar {
+            background: #1a1a1a;
+            border-bottom: 1px solid #333;
+            padding: 15px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
-        .stats-display { font-family: 'Anton'; font-size: 1.5rem; color: #fff; }
+        .stats-display { font-family: 'Anton'; font-size: 1.8rem; color: #fff; }
         .stats-display span { font-size: 1rem; color: #777; font-family: 'Roboto'; margin-left: 10px; }
-        .stats-controls { display: flex; gap: 10px; }
+        
+        .stats-controls { display: flex; gap: 15px; }
         .stat-btn {
-            border: none; padding: 10px 20px; font-weight: bold; cursor: pointer; border-radius: 4px; color: white;
-            font-family: 'Anton'; letter-spacing: 1px; transition: 0.2s;
+            border: none; padding: 10px 30px; font-weight: bold; cursor: pointer; border-radius: 4px; color: white;
+            font-family: 'Anton'; letter-spacing: 1px; font-size: 1rem; transition: 0.2s;
         }
-        .btn-win { background: #2ecc71; border: 1px solid #27ae60; }
-        .btn-win:hover { background: #27ae60; }
-        .btn-lose { background: #e74c3c; border: 1px solid #c0392b; }
-        .btn-lose:hover { background: #c0392b; }
+        .btn-win { background: #00b894; border: 2px solid #00b894; }
+        .btn-win:hover { background: #00a382; transform: scale(1.05); }
+        
+        .btn-lose { background: #d63031; border: 2px solid #d63031; }
+        .btn-lose:hover { background: #c0392b; transform: scale(1.05); }
 
-        /* Main Content */
+        .modal-body { padding: 30px; display: flex; flex-direction: column; gap: 20px; }
+
         .main-content { display: flex; gap: 30px; }
         .strategy-section { flex: 1; }
         .notes-section { flex: 1; display: flex; flex-direction: column; }
@@ -176,14 +179,9 @@
         #save-btn:hover { background: white; }
         #save-msg { display: block; text-align: center; color: var(--green); margin-top: 10px; opacity: 0; transition: 0.3s; }
 
-        /* Footer */
-        footer { position: fixed; bottom: 0; width: 100%; text-align: center; padding: 15px; background: rgba(0,0,0,0.9); border-top: 1px solid #333; }
-        .data-btn { background: #333; color: #aaa; border: 1px solid #444; padding: 5px 15px; cursor: pointer; font-size: 0.8rem; margin: 0 5px; border-radius: 3px; }
-        .data-btn:hover { color: white; border-color: white; }
-
         @media (max-width: 800px) {
             .main-content { flex-direction: column; }
-            .stats-container { flex-direction: column; gap: 15px; text-align: center; }
+            .scoreboard-bar { flex-direction: column; gap: 15px; text-align: center; }
             h1 { font-size: 3rem; }
             .skin-selector { top: 10px; right: 10px; font-size: 0.8rem; }
         }
@@ -235,17 +233,17 @@
                 </div>
             </div>
             
-            <div class="modal-body">
-                <div class="stats-container">
-                    <div class="stats-display" id="stats-display">
-                        0% WR <span>(0V - 0D)</span>
-                    </div>
-                    <div class="stats-controls">
-                        <button class="stat-btn btn-win" onclick="addWin()"><i class="fas fa-check"></i> VICTOIRE</button>
-                        <button class="stat-btn btn-lose" onclick="addLoss()"><i class="fas fa-times"></i> DÉFAITE</button>
-                    </div>
+            <div class="scoreboard-bar">
+                <div class="stats-display" id="stats-display">
+                    0% WR <span>(0V - 0D)</span>
                 </div>
+                <div class="stats-controls">
+                    <button class="stat-btn btn-win" onclick="addWin()"><i class="fas fa-check"></i> VICTOIRE</button>
+                    <button class="stat-btn btn-lose" onclick="addLoss()"><i class="fas fa-times"></i> DÉFAITE</button>
+                </div>
+            </div>
 
+            <div class="modal-body">
                 <div class="main-content">
                     <div class="strategy-section">
                         <div class="box pros">
@@ -261,7 +259,7 @@
                     <div class="notes-section">
                         <h3><i class="fas fa-pencil-alt"></i> MES NOTES</h3>
                         <textarea id="user-notes" placeholder="Mes astuces perso..."></textarea>
-                        <button id="save-btn">SAUVEGARDER</button>
+                        <button id="save-btn">SAUVEGARDER NOTES</button>
                         <span id="save-msg">Sauvegardé !</span>
                     </div>
                 </div>
@@ -269,16 +267,9 @@
         </div>
     </div>
 
-    <footer>
-        <button id="export-btn" class="data-btn"><i class="fas fa-download"></i> Sauvegarder mes données (Notes + Stats)</button>
-        <button id="import-btn-trigger" class="data-btn"><i class="fas fa-upload"></i> Charger un fichier</button>
-        <input type="file" id="import-file" style="display: none;">
-    </footer>
-
     <script>
         const spellUrl = (spell) => `https://ddragon.leagueoflegends.com/cdn/13.24.1/img/spell/Summoner${spell}.png`;
 
-        // --- DATABASE (Ajout de Singed, Gwen, Pantheon, Rumble, Gragas) ---
         const data = [
             { id: "Darius", name: "Darius", diff: "hard", img: "Darius", spells: ["Flash", "Barrier"], ult: "120s / 100s / 80s", cheese: false,
               pros: "Gagne les courts trades si tu esquives son A (Q) externe.", cons: "5 stacks = mort." },
@@ -416,9 +407,6 @@
         const saveBtn = document.getElementById('save-btn');
         const saveMsg = document.getElementById('save-msg');
         const closeBtn = document.querySelector('.close-btn');
-        const exportBtn = document.getElementById('export-btn');
-        const importBtnTrig = document.getElementById('import-btn-trigger');
-        const importFile = document.getElementById('import-file');
         const statsDisplay = document.getElementById('stats-display');
 
         let currentFilter = 'all';
@@ -521,7 +509,7 @@
                 else color = "#f1c40f"; // Yellow
             }
 
-            statsDisplay.innerHTML = `<span style="color:${color}; font-size:1.5rem; margin:0;">${wr}% WR</span> <span>(${s.wins}V - ${s.losses}D)</span>`;
+            statsDisplay.innerHTML = `<span style="color:${color}; font-size:1.8rem; margin:0;">${wr}% WR</span> <span>(${s.wins}V - ${s.losses}D)</span>`;
         }
 
         window.addWin = () => {
@@ -544,43 +532,6 @@
                 saveMsg.style.opacity = "1";
                 setTimeout(() => { saveMsg.style.opacity = "0"; }, 2000);
             }
-        };
-
-        // --- IMPORT / EXPORT (Notes + Stats) ---
-        exportBtn.onclick = () => {
-            let exportData = {};
-            for (let i = 0; i < localStorage.length; i++) {
-                const key = localStorage.key(i);
-                if (key.startsWith('ww_note_') || key.startsWith('ww_stats_')) {
-                    exportData[key] = localStorage.getItem(key);
-                }
-            }
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportData));
-            const dlAnchor = document.createElement('a');
-            dlAnchor.setAttribute("href", dataStr);
-            dlAnchor.setAttribute("download", "warwick_data_full.json");
-            document.body.appendChild(dlAnchor);
-            dlAnchor.click();
-            dlAnchor.remove();
-        };
-
-        importBtnTrig.onclick = () => importFile.click();
-
-        importFile.onchange = (e) => {
-            const file = e.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = (event) => {
-                try {
-                    const imported = JSON.parse(event.target.result);
-                    Object.keys(imported).forEach(key => {
-                        if(key.startsWith('ww_note_') || key.startsWith('ww_stats_')) localStorage.setItem(key, imported[key]);
-                    });
-                    alert("Données chargées !");
-                    location.reload();
-                } catch(err) { alert("Erreur fichier."); }
-            };
-            reader.readAsText(file);
         };
 
         search.oninput = (e) => render(e.target.value);
