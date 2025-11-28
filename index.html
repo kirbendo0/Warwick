@@ -277,6 +277,15 @@
         function openModal(c) {
             currentId = c.id;
             mTitle.innerText = c.name.toUpperCase();
+            const ytBtn = document.createElement('a');
+            ytBtn.href = `https://www.youtube.com/results?search_query=Warwick+vs+${c.name}+Top+Challenger+DomisumReplay`;
+            ytBtn.target = "_blank"; // Ouvre dans un nouvel onglet
+            ytBtn.className = "youtube-btn";
+            ytBtn.innerHTML = '<i class="fab fa-youtube"></i> Voir un Replay';
+            
+            // On vide le conteneur de sorts s'il y avait déjà un bouton, et on ajoute le nouveau
+            // (Il faudra peut-être créer un petit div pour le bouton dans le HTML, ou l'ajouter sous les sorts)
+            mSpells.appendChild(ytBtn);
             mHeader.style.backgroundImage = `url('https://ddragon.leagueoflegends.com/cdn/img/champion/splash/${c.img}_0.jpg')`;
             mPros.innerText = c.pros;
             mCons.innerText = c.cons;
@@ -338,3 +347,4 @@
     </script>
 </body>
 </html>
+
